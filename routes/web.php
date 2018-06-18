@@ -11,6 +11,21 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('login',"AdminController@getLogin")->name('login');
+Route::get('register',"AdminController@getRegister")->name('register');
+
+Route::group([
+    'prefix'=>'/',
+    'middleware'=>'checkLogin'
+], function(){
+
+    Route::get('/',"AdminController@getHome")->name('home');
+    Route::get('list-product',"AdminController@getListProduct")->name('listproduct');
+
 });
+
+
