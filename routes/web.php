@@ -29,6 +29,7 @@ Route::group([
     Route::get('/',"AdminController@getHome")->name('home');
     Route::get('list-product',"AdminController@getListProduct")->name('listproduct');
 
+    Route::get('logout','AdminController@logout')->name('logout');    
 });
 
 

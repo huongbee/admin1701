@@ -60,9 +60,16 @@ class AdminController extends Controller
                 ->route('login')
                 ->with('success','Đăng kí thành công.');
     }
+    
+    function logout(){
+        Auth::logout();
+        return redirect()
+                ->route('login');
+    }
 
     function getHome(){
-        return "home page";
+        //dd(Auth::user()->fullname);
+        return view('home');
     }
 
     function getListProduct(){
