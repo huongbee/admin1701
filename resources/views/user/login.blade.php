@@ -9,12 +9,18 @@
             {{ session('success') }}
         </div>
     @endif
-    <form class="form-signin" method="post" action="#">
+    @if (session('error_message'))
+        <div class="alert alert-danger">
+            {{ session('error_message') }}
+        </div>
+    @endif
+    <form class="form-signin" method="post" action="{{route('login')}}">
+        @csrf()
         <span id="reauth-email" class="reauth-email"></span>
         <input type="email" name="inputEmail" class="form-control" placeholder="Email address" required autofocus>
         <input type="password" name="inputPassword" class="form-control" placeholder="Password" required>
         
-        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" name="login">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Login</button>
     </form><!-- /form -->
     <a href="#" class="forgot-password">
         Forgot the password?

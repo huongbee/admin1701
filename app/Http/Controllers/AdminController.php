@@ -6,11 +6,24 @@ use Illuminate\Http\Request;
 use Validator;
 use App\User;
 use Hash;
+use Auth;
 
 class AdminController extends Controller
 {
     function getLogin(){
         return view('user.login');
+    }
+    function postLogin(Request $req){
+        $data = [
+            'email'=>$req->inputEmail,
+            'password'=>$req->inputPassword
+        ];
+        if(Auth::attempt($data)){
+            return redirect()
+                ->route('home');
+        }
+        return redirect()->back()
+                ->with('error_message','Sai thông tin đăng nhập.');
     }
 
     function getRegister(){

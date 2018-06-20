@@ -16,6 +16,8 @@
 // });
 
 Route::get('login',"AdminController@getLogin")->name('login');
+Route::post('login',"AdminController@postLogin")->name('login');
+
 Route::get('register',"AdminController@getRegister")->name('register');
 Route::post('register',"AdminController@postRegister")->name('register');
 
