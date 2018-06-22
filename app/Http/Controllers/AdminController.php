@@ -7,6 +7,7 @@ use Validator;
 use App\User;
 use Hash;
 use Auth;
+use App\Bills;
 
 class AdminController extends Controller
 {
@@ -68,8 +69,24 @@ class AdminController extends Controller
     }
 
     function getHome(){
-        //dd(Auth::user()->fullname);
-        return view('home');
+        $chuaXacNhan = Bills::with('products')
+                        ->where('status',0)
+                        ->orderBy('id','DESC')
+                        ->limit(20)
+                        ->get();
+        $daXacNhan = Bills::with('products')
+                        ->where('status',1)
+                        ->orderBy('id','DESC')
+                        ->limit(20)
+                        ->get();
+        $daHoantat = Bills::with('products')
+                        ->where('status',2)
+                        ->orderBy('id','DESC')
+                        ->limit(20)
+                        ->get();
+        
+        //dd($chuaXacNhan);
+        return view('home',compact('chuaXacNhan','daXacNhan','daHoantat'));
     }
 
     function getListProduct(){
