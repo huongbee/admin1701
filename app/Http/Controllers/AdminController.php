@@ -92,4 +92,16 @@ class AdminController extends Controller
     function getListProduct(){
         return "getListProduct";
     }
+
+    function getUpdateStatusBill(Request $req){
+        $bill = Bills::where('id',$req->id)->first();
+        if($bill){
+            $bill->status = 2;
+            $bill->save();
+            echo "true";
+        }
+        else{
+            echo "false";
+        }
+    }
 }

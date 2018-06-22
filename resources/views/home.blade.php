@@ -75,7 +75,7 @@
                                 @endforeach
 
                             </td>
-                            <td><input type="checkbox" class="update-status"></td>
+                            <td><input id="{{$bill->id}}" type="checkbox" class="update-status"></td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -143,4 +143,34 @@
 
     </div>
 </div>
+<script src="admin-master/js/jquery.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $('.update-status').click(function(){
+            var idBill = $(this).attr('id')
+            if($(this).is(':checked')){
+                $.ajax({
+                    url: '{{route("update-status-bill")}}',
+                    data:{
+                        id:idBill
+                    },
+                    type:"GET",
+                    success:function(res){
+                        if($.trim(res)=='true'){
+                            alert('Trạng thái đơn hàng đã cập nhật')
+                        }
+                        else{
+                            alert('Vui lòng thử lại')
+                        }
+                    },
+                    error:function(){
+                        alert('Vui lòng thử lại')
+                    }
+                })
+                location.reload();
+            } 
+        })
+    })
+</script>
 @endsection @section('title','Home')
