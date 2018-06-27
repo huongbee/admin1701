@@ -8,6 +8,9 @@ use App\User;
 use Hash;
 use Auth;
 use App\Bills;
+use App\PageUrl;
+use App\Categories;
+use App\Products;
 
 class AdminController extends Controller
 {
@@ -88,11 +91,6 @@ class AdminController extends Controller
         //dd($chuaXacNhan);
         return view('home',compact('chuaXacNhan','daXacNhan','daHoantat'));
     }
-
-    function getListProduct(){
-        return "getListProduct";
-    }
-
     function getUpdateStatusBill(Request $req){
         $bill = Bills::where('id',$req->id)->first();
         if($bill){
@@ -104,4 +102,20 @@ class AdminController extends Controller
             echo "false";
         }
     }
+
+    function getListProductByType(Request $req){
+        $url = $req->alias;
+        $products = PageUrl::with('categories','categories.products','categories.products.pageUrlProduct')
+                    ->where('url',$url)
+                    ->first();
+        //dd($products);
+        return view('list-product',compact('products'));
+    }
+    function getEditProductByType(Request $req){
+        $id = $req->id;
+        $product = Products::where('id',$id)->first();
+        return view('edit-product',compact('product'));
+    }   
+
+    
 }

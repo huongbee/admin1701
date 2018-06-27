@@ -28,9 +28,15 @@ Route::group([
 
     Route::get('/',"AdminController@getHome")->name('home');
     Route::get('update-status-bill',"AdminController@getUpdateStatusBill")->name('update-status-bill');
-    Route::get('list-product',"AdminController@getListProduct")->name('listproduct');
+
+    Route::get('{alias}',"AdminController@getListProductByType")->name('listproduct');
+
+    Route::get('edit/{alias}-{id}',"AdminController@getEditProductByType")->name('editproduct')->where([
+        'alias'=>'[a-zA-Z0-9-,]+',
+        'id'=>'[0-9]+'
+    ]);
+
 
     Route::get('logout','AdminController@logout')->name('logout');    
 });
-
 

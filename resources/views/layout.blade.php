@@ -9,6 +9,7 @@
     <link rel="shortcut icon" href="admin-master/img/favicon.html">
 
     <title>@yield('title')</title>
+    <base href="{{asset('')}}">
 
     <!-- Bootstrap core CSS -->
     <link href="admin-master/css/bootstrap.min.css" rel="stylesheet">
@@ -286,7 +287,7 @@
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
                   <li>
-                      <a class="active" href="index.html">
+                      <a class="active" href="./">
                           <i class="fa fa-dashboard"></i>
                           <span>Dashboard</span>
                       </a>
@@ -295,12 +296,30 @@
                   <li class="sub-menu">
                       <a href="javascript:;" >
                           <i class=" fa fa-envelope"></i>
-                          <span>Mail</span>
+                          <span>Sản phẩm</span>
                       </a>
                       <ul class="sub">
-                          <li><a  href="inbox.html">Inbox</a></li>
-                          <li><a  href="inbox_details.html">Inbox Details</a></li>
-                      </ul>
+                        @foreach($menu as $m)
+                        @if($m->submenu == null)
+                            <li><a  href="{{route('listproduct',$m->url)}}">{{$m->name}}</a></li>
+                        @else
+                        <li class="sub-menu">
+                            <a  href="boxed_page.html">{{$m->name}}</a>
+                            <?php 
+                                $submenu = explode(',',$m->submenu);
+                            ?>
+                            <ul class="sub">
+                                @foreach($submenu as $sub)
+                                <?php 
+                                    $s = explode('::',$sub);
+                                ?>
+                                <li><a  href="{{route('listproduct',$s[1])}}">{{$s[0]}}</a></li>
+                                @endforeach
+                            </ul>
+                        </li>
+                        @endif
+                        @endforeach
+                    </ul>
                   </li>
                   <li class="sub-menu">
                       <a href="javascript:;" >
