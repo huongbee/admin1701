@@ -29,13 +29,17 @@ Route::group([
     Route::get('/',"AdminController@getHome")->name('home');
     Route::get('update-status-bill',"AdminController@getUpdateStatusBill")->name('update-status-bill');
 
-    Route::get('{alias}',"AdminController@getListProductByType")->name('listproduct');
+    Route::get('{alias}',"AdminController@getListProductByType")->name('listproduct')->where('alias','[a-zA-Z0-9-]+');
 
-    Route::get('edit/{alias}-{id}',"AdminController@getEditProductByType")->name('editproduct')->where([
+    Route::get('edit/{id}',"AdminController@getEditProductByType")->name('editproduct')->where([
         'alias'=>'[a-zA-Z0-9-,]+',
         'id'=>'[0-9]+'
     ]);
+    Route::post('edit',"AdminController@postEditProductByType")->name('editproduct');
 
+    Route::get('add-product.html',"AdminController@getAddProduct")->name('add-product');
+    Route::post('add-product.html',"AdminController@postAddProductByType")->name('add-product');
+    
 
     Route::get('logout','AdminController@logout')->name('logout');    
 });

@@ -8,7 +8,7 @@ class Products extends Model
 {
     public $table = "products";
     public $timestamps = false;
-    const UPDATED_AT = 'update_at';
+    //const UPDATED_AT = 'update_at';
 
     function pageUrlProduct(){
         return $this->belongsTo('App\PageUrl','id_url','id');

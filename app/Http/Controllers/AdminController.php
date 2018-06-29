@@ -105,17 +105,97 @@ class AdminController extends Controller
 
     function getListProductByType(Request $req){
         $url = $req->alias;
-        $products = PageUrl::with('categories','categories.products','categories.products.pageUrlProduct')
+        //$products = PageUrl::with('categories','categories.products')
+        //             ->where('url',$url)
+        //             ->first();
+        $pageUrl=PageUrl::with('categories')
                     ->where('url',$url)
                     ->first();
+        $products =  Products::where('id_type',$pageUrl->categories->id)
+                    ->orderBy('id','DESC')
+                    ->paginate(10);
         //dd($products);
-        return view('list-product',compact('products'));
+        return view('list-product',compact('products','pageUrl'));
     }
     function getEditProductByType(Request $req){
         $id = $req->id;
         $product = Products::where('id',$id)->first();
-        return view('edit-product',compact('product'));
+        //$type = \DB::select('SELECT * FROM categories WHERE id IN (SELECT DISTINCT id_type FROM `products`)');
+        $type = Categories::all();
+        //dd($product);
+        return view('edit-product',compact('product','type'));
     }   
+    function postEditProductByType(Request $req){
+        $product = Products::where('id',$req->id)->first();
+        if($product){
+            //update
+            $product->id_type = $req->id_type;
+            $product->name = $req->name;
+            $product->detail = $req->detail;
+            $product->price = $req->price;
+            $product->promotion_price = $req->promotion_price;
+            $product->promotion = $req->promotion;
+            $product->status = $req->status == 1? 1:0;
+            $product->new = $req->new == 1? 1:0;
+
+            //image
+            if($req->hasFile('image')){
+                $file = $req->file('image');
+                $name = time().$file->getClientOriginalName();
+                $file->move('admin-master/images/products/',$name);
+
+                $product->image = $name;
+            }
+            $product->save();
+
+            //update url
+            $pageUrl = PageUrl::where('id',$product->id_url)->first();
+            $pageUrl->url = (new \App\Helpers\Helpers)->changeTitle($product->name);
+            $pageUrl->save();
+
+            $typeUrl = Categories::with('pageUrl')->where('id',$product->id_type)->first();
+             
+            return redirect()->route('listproduct',$typeUrl->pageUrl->url)->with('success','Cập nhật thành công');
+
+        }
+        else{
+            return redirect()->back()->with('error','Không tìm thấy sản phẩm');
+        }
+    }
+
+    function getAddProduct(){
+        $type = Categories::all();
+        return view('add',compact('type'));
+    }
+    function postAddProductByType(Request $req){
+        //update url
+        $pageUrl = new PageUrl;
+        $pageUrl->url = (new \App\Helpers\Helpers)->changeTitle($req->name);
+        $pageUrl->save();
+
+        $product = new Products;
+        $product->id_type = $req->id_type;
+        $product->id_url = $pageUrl->id;
+        $product->name = $req->name;
+        $product->detail = $req->detail;
+        $product->price = $req->price;
+        $product->promotion_price = $req->promotion_price;
+        $product->promotion = $req->promotion;
+        $product->status = $req->status == 1? 1:0;
+        $product->new = $req->new == 1? 1:0;
+
+        $file = $req->file('image');
+        $name = time().$file->getClientOriginalName();
+        $file->move('admin-master/images/products/',$name);
+
+        $product->image = $name;
+        $product->save();
+
+        $typeUrl = Categories::with('pageUrl')->where('id',$product->id_type)->first();
+            
+        return redirect()->route('listproduct',$typeUrl->pageUrl->url)->with('success','Thêm mới thành công');
+       
+    }
 
     
 }

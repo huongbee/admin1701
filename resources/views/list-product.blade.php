@@ -1,8 +1,13 @@
 @extends('layout') @section('content')
 <div class="panel panel-default">
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="panel-heading">
         <b>Danh sách sản phẩm thuộc loại
-            <i>{{$products->categories->name}}</i>
+            <i>{{$pageUrl->categories->name}}</i>
         </b>
     </div>
     <div class="panel-body">
@@ -20,7 +25,7 @@
             <tbody>
                 <?php $stt=1;?>
                 
-                @foreach($products->categories->products as $p)
+                @foreach($products as $p)
                 <tr>
                     <td>{{$stt++}}</td>
                     <td>{{$p->name}}</td>
@@ -32,7 +37,7 @@
                         <input type="checkbox" @if($p->status==1) checked @endif>
                     </td>
                     <td>
-                    <a href="{{route('editproduct',[$p->pageUrlProduct->url,$p->id])}}"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i>
+                    <a href="edit/{{$p->id}}"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i>
                         </a> |
                         <i class="fa fa-trash-o fa-2x" aria-hidden="true"></i> 
         
@@ -41,6 +46,9 @@
                 @endforeach
             </tbody>
         </table>
+
+        {{$products->links()}}
     </div>
+
 </div>
 @endsection
