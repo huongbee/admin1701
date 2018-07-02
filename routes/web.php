@@ -40,6 +40,7 @@ Route::group([
     Route::get('add-product.html',"AdminController@getAddProduct")->name('add-product');
     Route::post('add-product.html',"AdminController@postAddProductByType")->name('add-product');
     
+    Route::post('delete.html',"AdminController@postDeleteProduct")->name('delete-product');
 
     Route::get('logout','AdminController@logout')->name('logout');    
 });

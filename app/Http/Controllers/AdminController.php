@@ -11,6 +11,7 @@ use App\Bills;
 use App\PageUrl;
 use App\Categories;
 use App\Products;
+//use Symfony\Component\HttpFoundation\Request as Res;
 
 class AdminController extends Controller
 {
@@ -195,6 +196,10 @@ class AdminController extends Controller
             
         return redirect()->route('listproduct',$typeUrl->pageUrl->url)->with('success','Thêm mới thành công');
        
+    }
+
+    function postDeleteProduct(Request $req){
+        echo $req->id;
     }
 
     
